@@ -45,8 +45,10 @@ Table of Contents
 | [DynamoDB](#dynamodb) | [📗](#dynamodb-basics) | [📘](#dynamodb-tips) | [📙](#dynamodb-gotchas-and-limitations) |
 | [ElastiCache](#elasticache) | [📗](#elasticache-basics) | [📘](#elasticache-tips) | [📙](#elasticache-gotchas-and-limitations) |
 | [ECS](#ecs) | [📗](#ecs-basics) | [📘](#ecs-tips) |  |
+| [Fargate](#fargate) | [📗](#fargate-basics) | [📘](#fargate-tips) | [📙](#fargate-gotchas-and-limitations) |
 | [Lambda](#lambda) | [📗](#lambda-basics) | [📘](#lambda-tips) | [📙](#lambda-gotchas-and-limitations) |
 | [API Gateway](#api-gateway) | [📗](#api-gateway-basics) | [📘](#api-gateway-tips) | [📙](#api-gateway-gotchas-and-limitations) |
+| [Step Functions](#step-functions) | [📗](#step-function-basics) | [📘](#step-function-tips) | [📙](#step-function-gotchas-and-limitations) |
 | [Route 53](#route-53) | [📗](#route-53-basics) | [📘](#route-53-tips) |  |
 | [CloudFormation](#cloudformation) | [📗](#cloudformation-basics) | [📘](#cloudformation-tips) | [📙](#cloudformation-gotchas-and-limitations) |
 | [VPCs, Network Security, and Security Groups](#vpcs-network-security-and-security-groups) | [📗](#vpc-basics) | [📘](#vpc-and-network-security-tips) | [📙](#vpc-and-network-security-gotchas-and-limitations) |
@@ -58,6 +60,7 @@ Table of Contents
 | [Kinesis Streams](#kinesis-streams) | [📗](#kinesis-streams-basics) | [📘](#kinesis-streams-tips) | [📙](#kinesis-streams-gotchas-and-limitations) |
 | [Kinesis Firehose](#kinesis-firehose) |  |  | [📙](#kinesis-firehose-gotchas-and-limitations) |
 | [Device Farm](#device-farm) | [📗](#device-farm-basics) | [📘](#device-farm-tips) | [📙](#device-farm-gotchas-and-limitations) |
+| [Mobile Hub](#mobile-hub) | [📗](#mobile-hub-basics) | [📘](#mobile-hub-tips) | [📙](#mobile-hub-gotchas-and-limitations) |
 | [IoT](#iot) | [📗](#iot-basics) | [📘](#iot-tips) | [📙](#iot-gotchas-and-limitations) |
 | [SES](#ses) | [📗](#ses-basics) | [📘](#ses-tips) | [📙](#ses-gotchas-and-limitations) |
 | [Certificate Manager](#certificate-manager) | [📗](#certificate-manager-basics) | [📘](#certificate-manager-tips) | [📙](#certificate-manager-gotchas-and-limitations) |
@@ -143,7 +146,7 @@ General Information
 	-	In general, “[cloud computing](https://en.wikipedia.org/wiki/Cloud_computing)” can refer to one of three types of cloud: “public,” “private,” and “hybrid.” AWS is a public cloud provider, since anyone can use it. Private clouds are within a single (usually large) organization. Many companies use a hybrid of private and public clouds.
 	-	The core features of AWS are [infrastructure-as-a-service](https://en.wikipedia.org/wiki/Cloud_computing#Infrastructure_as_a_service_.28IaaS.29) (IaaS) — that is, virtual machines and supporting infrastructure. Other cloud service models include [platform-as-a-service](https://en.wikipedia.org/wiki/Cloud_computing#Platform_as_a_service_.28PaaS.29) (PaaS), which typically are more fully managed services that deploy customers’ applications, or [software-as-a-service](https://en.wikipedia.org/wiki/Cloud_computing#Software_as_a_service_.28SaaS.29) (SaaS), which are cloud-based applications. AWS does offer a few products that fit into these other models, too.
 	-	In business terms, with infrastructure-as-a-service you have a variable cost model — it is [OpEx, not CapEx](http://www.investopedia.com/ask/answers/020915/what-difference-between-capex-and-opex.asp) (though some [pre-purchased contracts](https://aws.amazon.com/ec2/purchasing-options/reserved-instances/) are still CapEx).
--	AWS’s annual revenue was [**$12.21 billion**](http://services.corporate-ir.net/SEC.Enhanced/SecCapsule.aspx?c=97664&fid=14806946) as of 2016 according to their SEC 10-K filing, or roughly **8.9%** of Amazon.com’s total 2016 revenue.
+-	AWS’s annual revenue was [**$17.46 billion**](http://phx.corporate-ir.net/phoenix.zhtml?c=97664&p=irol-sec&control_selectgroup=Annual%20Filings#15414896) in 2017 according to their SEC 10-K filing, or roughly **10%** of Amazon.com’s total 2017 revenue.
 -	**Main reasons to use AWS:**
 	-	If your company is building systems or products that may need to scale
 	-	and you have technical know-how
@@ -176,10 +179,10 @@ General Information
 	-	Generally, the more AWS services you use, the more lock-in you have to AWS — that is, the more engineering resources (time and money) it will take to change to other providers in the future.
 	-	Basic services like virtual servers and standard databases are usually easy to migrate to other providers or on premises. Others like load balancers and IAM are specific to AWS but have close equivalents from other providers. The key thing to consider is whether engineers are architecting systems around specific AWS services that are not open source or relatively interchangeable. For example, Lambda, API Gateway, Kinesis, Redshift, and DynamoDB do not have substantially equivalent open source or commercial service equivalents, while EC2, RDS (MySQL or Postgres), EMR, and ElastiCache more or less do. (See more [below](#which-services-to-use), where these are noted with ⛓.)
 -	**Combining AWS and other cloud providers:** Many customers combine AWS with other non-AWS services. For example, legacy systems or secure data might be in a managed hosting provider, while other systems are AWS. Or a company might only use S3 with another provider doing everything else. However small startups or projects starting fresh will typically stick to AWS or Google Cloud only.
--	**Hybrid cloud:** In larger enterprises, it is common to have [hybrid deployments](https://aws.amazon.com/enterprise/hybrid/) encompassing private cloud or on-premises servers and AWS — or other enterprise cloud providers like [IBM](https://www.ibm.com/cloud-computing/solutions/hybrid-cloud)/[Bluemix](http://www.ibm.com/cloud-computing/bluemix/hybrid/), [Microsoft](https://www.microsoft.com/en-us/cloud-platform/hybrid-cloud)/[Azure](https://azure.microsoft.com/en-us/overview/azure-stack/), [NetApp](http://www.netapp.com/us/solutions/cloud/hybrid-cloud/), or [EMC](http://www.emc.com/en-us/cloud/hybrid-cloud-computing/index.htm).
+-	**Hybrid cloud:** In larger enterprises, it is common to have [hybrid deployments](https://aws.amazon.com/enterprise/hybrid/) encompassing private cloud or on-premises servers and AWS — or other enterprise cloud providers like [IBM](https://www.ibm.com/it-infrastructure/us-en/hybrid-cloud/)/[Bluemix](http://www.ibm.com/cloud-computing/bluemix/hybrid/), [Microsoft](https://www.microsoft.com/en-us/cloud-platform/hybrid-cloud)/[Azure](https://azure.microsoft.com/en-us/overview/azure-stack/), [NetApp](http://www.netapp.com/us/solutions/cloud/hybrid-cloud/), or [EMC](http://www.emc.com/en-us/cloud/hybrid-cloud-computing/index.htm).
 -	**Major customers:** Who uses AWS and Google Cloud?
 	-	AWS’s [list of customers](https://aws.amazon.com/solutions/case-studies/) includes large numbers of mainstream online properties and major brands, such as Netflix, Pinterest, Spotify (moving to Google Cloud), Airbnb, Expedia, Yelp, Zynga, Comcast, Nokia, and Bristol-Myers Squibb.
-        -	Azure’s [list of customers](https://azure.microsoft.com/en-us/case-studies/) includes companies such as NBC Universal, 3M and Honeywell Inc.
+	-	Azure’s [list of customers](https://azure.microsoft.com/en-us/case-studies/) includes companies such as NBC Universal, 3M and Honeywell Inc.
 	-	Google Cloud’s [list of customers](https://cloud.google.com/customers/) is large as well, and includes a few mainstream sites, such as [Snapchat](http://www.businessinsider.com/snapchat-is-built-on-googles-cloud-2014-1), Best Buy, Domino’s, and Sony Music.
 
 ### Which Services to Use
@@ -230,6 +233,7 @@ General Information
 	-	[Inspector](https://aws.amazon.com/inspector/): Security audit
 	-	[Trusted Advisor](https://aws.amazon.com/premiumsupport/trustedadvisor/): Automated tips on reducing cost or making improvements
 	-	🐥[Certificate Manager](https://aws.amazon.com/certificate-manager/): Manage SSL/TLS certificates for AWS services
+	-	🐥⛓[Fargate](https://aws.amazon.com/fargate/): Docker containers management, backend for ECS
 -	**Compound services:** These are similarly specific, but are full-blown services that tackle complex problems and may tie you in. Usefulness depends on your requirements. If you have large or significant need, you may have these already managed by in-house systems and engineering teams.
 	-	[Machine Learning](https://aws.amazon.com/machine-learning/): Machine learning model training and classification
 	-	[Lex](https://aws.amazon.com/lex/): Automatic speech recognition (ASR) and natural language understanding (NLU)
@@ -289,8 +293,8 @@ Many services within AWS can at least be compared with Google Cloud offerings or
 | Virtual server                | EC2                                                                          | Compute Engine (GCE)         |                 | Virtual Machine                    | DigitalOcean                      | OpenStack                                                  |
 | PaaS                          | Elastic Beanstalk                                                            | App Engine                   | App Engine      | Web Apps                           | Heroku, AppFog, OpenShift | Meteor, AppScale, Cloud Foundry, Convox                    |
 | Serverless, microservices     | Lambda, API Gateway                                                          | Functions                    |                 | Function Apps                      | PubNub Blocks, Auth0 Webtask      | Kong, Tyk                                                  |
-| Container, cluster manager    | ECS                                                                          | Container Engine, Kubernetes | Borg or Omega   | Container Service                  |                                   | Kubernetes, Mesos, Aurora                                  |
-| Object storage                  | S3                                                                           | Cloud Storage                | GFS             | Storage Account                    |                                   | Swift, HDFS                                                |
+| Container, cluster manager    | ECS, Fargate                                                                 | Container Engine, Kubernetes | Borg or Omega   | Container Service                  |                                   | Kubernetes, Mesos, Aurora                                  |
+| Object storage                  | S3                                                                           | Cloud Storage                | GFS             | Storage Account                    | DigitalOcean Spaces               | Swift, HDFS, Minio                                         |
 | Block storage                 | EBS                                                                          | Persistent Disk              |                 | Storage Account                    | DigitalOcean Volumes              | NFS                                                        |
 | SQL datastore                 | RDS                                                                          | Cloud SQL                    |                 | SQL Database                       |                                   | MySQL, PostgreSQL                                          |
 | Sharded RDBMS                 |                                                                              | Cloud Spanner                | F1, Spanner     |                                    |                                   | Crate.io, CockroachDB                                      |
@@ -319,6 +323,7 @@ Many services within AWS can at least be compared with Google Cloud offerings or
 | Text-to-speech engine in the cloud            | Polly                                                                  |                |                 |                 |Nuance, Vocalware, IBM | Mimic, eSpeak, MaryTTS |
 | Image recognition            | Rekognition                                                            |   Vision API              |                |Cognitive services                 | IBM Watson, Clarifai |TensorFlow, OpenCV |
 | File Share and Sync          | WorkDocs                                                                   |   Google Docs                 |                 |OneDrive                  |       Dropbox, Box, Citrix File Share                  |ownCloud |
+| Machine Learning          | SageMaker, DeepLens, ML                                                                   |   ML Engine, Auto ML                 |                 |ML Studio                  |       Watson ML                  |  |
 
 
 
@@ -450,6 +455,7 @@ Learning and Career Development
 ### Certifications
 
 -	**Certifications:** AWS offers [**certifications**](https://aws.amazon.com/certification/) for IT professionals who want to demonstrate their knowledge.
+  -	[Certified Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/)
   -	[Certified Solutions Architect Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/)
   -	[Certified Developer Associate](https://aws.amazon.com/certification/certified-developer-associate/)
   -	[Certified SysOps Administrator Associate](https://aws.amazon.com/certification/certified-sysops-admin-associate/)
@@ -522,6 +528,7 @@ So if you’re not going to manage your AWS configurations manually, what should
 	-	To label lifecycles, such as temporary resources or one that should be deprovisioned in the future
 	-	To distinguish production-critical infrastructure (e.g. serving systems vs backend pipelines)
 	-	To distinguish resources with special security or compliance requirements
+	-	To (once enabled) [allocate cost](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html). Note that cost allocation tags only apply on a forward-looking basis; you can't retroactively apply them to items already billed.
 	-	For many years, there was a notorious 10 tag limit per resource, which could not be raised and caused many companies significant pain. As of 2016, this was [raised](https://aws.amazon.com/blogs/security/now-organize-your-aws-resources-by-using-up-to-50-tags-per-resource/) to 50 tags per resource.
 	-	🔹In 2017, AWS introduced the ability to [enforce tagging](https://aws.amazon.com/blogs/aws/new-tag-ec2-instances-ebs-volumes-on-creation/) on instance and volume creation, deprecating portions of third party tools such as [Cloud Custodian](https://github.com/capitalone/cloud-custodian).
 
@@ -658,7 +665,7 @@ S3
 -	📒 [Homepage](https://aws.amazon.com/s3/) ∙ [Developer guide](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html) ∙ [FAQ](https://aws.amazon.com/s3/faqs/) ∙ [Pricing](https://aws.amazon.com/s3/pricing/)
 -	**S3** (Simple Storage Service) is AWS’ standard cloud storage service, offering file (opaque “blob”) storage of arbitrary numbers of files of almost any size, from 0 to **5TB**. (Prior to [2011](https://aws.amazon.com/releasenotes/Amazon-S3/1917932037969964) the maximum size was 5 GB; larger sizes are now well supported via [multipart support](https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html).)
 -	Items, or **objects**, are placed into named **buckets** stored with names which are usually called **keys**. The main content is the **value**.
--	Objects are created, deleted, or updated. Large objects can be streamed, but you cannot access or modify parts of a value; you need to update the whole object.
+-	Objects are created, deleted, or updated. Large objects can be streamed, but you cannot modify parts of a value; you need to update the whole object. Partial data access can work via [S3 Select](https://aws.amazon.com/blogs/aws/s3-glacier-select/).
 -	Every object also has [**metadata**](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html), which includes arbitrary key-value pairs, and is used in a way similar to HTTP headers. Some metadata is system-defined, some are significant when serving HTTP content from buckets or CloudFront, and you can also define arbitrary metadata for your own use.
 -	**S3 URIs:** Although often bucket and key names are provided in APIs individually, it’s also common practice to write an S3 location in the form 's3://bucket-name/path/to/key' (where the key here is 'path/to/key'). (You’ll also see 's3n://' and 's3a://' prefixes [in Hadoop systems](https://wiki.apache.org/hadoop/AmazonS3).)
 -	**S3 vs Glacier, EBS, and EFS:** AWS offers many storage services, and several besides S3 offer file-type abstractions. [Glacier](#glacier) is for cheaper and infrequently accessed archival storage. [EBS](#ebs), unlike S3, allows random access to file contents via a traditional filesystem, but can only be attached to one EC2 instance at a time. [EFS](#efs) is a network filesystem many instances can connect to, but at higher cost. See the [comparison table](#storage-durability-availability-and-price).
@@ -672,10 +679,12 @@ S3
         + **IAM policies** use the familiar [Identity and Authentication Management](#security-and-iam) permission scheme to control access to specific operations.
         + **Bucket policies** grant or deny permissions to an entire bucket. You might use this when hosting a website in S3, to make the bucket publicly readable, or to restrict access to a bucket by IP address. Amazon's [sample bucket policies](http://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html) show a number of use cases where these policies come in handy.
         + **[Access Control Lists](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html)** (ACLs) can also be applied to every bucket and object stored in S3. ACLs grant additional permissions beyond those specified in IAM or bucket policies. ACLs can be used to grant access to another AWS user, or to predefined groups like the general public. This is powerful but can be dangerous, because you need to inspect every object to see who has access.
-    -   🔸AWS' [predefined access control groups](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#specifying-grantee-predefined-groups)use names which may not match allow access that may not be what you'd expect from their names:
-        +   **"All Users" grants permission to the general public**, not only to users defined in your own AWS account. If an object is available to All Users, then it can be retrieved with a simple HTTP request of the form `http://s3.amazonaws.com/bucket-name/filename`. No authorization or signature is required to access data in this category.
+    -   🔸AWS' [predefined access control groups](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#specifying-grantee-predefined-groups) allow access that may not be what you'd expect from their names:
+        +   **"All Users", or "Everyone", grants permission to the general public**, not only to users defined in your own AWS account. If an object is available to All Users, then it can be retrieved with a simple HTTP request of the form `http://s3.amazonaws.com/bucket-name/filename`. No authorization or signature is required to access data in this category.
         +   **"Authenticated Users" grants permissions to anyone with an AWS account**, again not limited to your own users. Because anyone can sign up for AWS, for all intents and purposes **this is also open to the general public**.
-            + A typical use case of this ACL is used in conjunction with the [requester pays](http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html) functionality of S3.
+        +   **"Log Delivery" group is used by AWS to write logs to buckets** and should be safe to enable on the buckets that need it.
+        +   A typical use case of this ACL is used in conjunction with the [requester pays](http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html) functionality of S3.
+    -   ❗ Bucket permissions and object permissions are two different things and independent of each other. A private object in a public bucket can be seen when listing the bucket, but not downloaded. At the same time, a public object in a private bucket won't be seen because the bucket contents can't be listed, but can still be downloaded by anyone who knows its exact key. Users that don't have access to set bucket permissions can still make objects public if they have `s3:PutObjectAcl` or `s3:PutObjectVersionAcl` [permissions](http://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html).
     -   🐥In August 2017, AWS added [AWS Config rules to ensure your S3 buckets are secure](https://aws.amazon.com/blogs/aws/aws-config-update-new-managed-rules-to-secure-s3-buckets/).
         +    ❗These AWS Config rules only check the security of your bucket policy and bucket-level ACLs. You can still create object ACLs that grant additional permissions, including opening files to the whole world.
     -   🔹Do create new buckets if you have different types of data with different sensitivity levels. This is much less error prone than complex permissions rules. For example, if data is for administrators only, like log data, put it in a new bucket that only administrators can access.
@@ -759,13 +768,14 @@ S3
 
 ### S3 Gotchas and Limitations
 
+-   ❗S3 buckets sit outside the VPC and can be accessed from anywhere in the world if bucket policies are not set to deny it. Read the permissions section above carefully, there are countless cases of buckets exposed to the public.
 -	🔸For many years, there was a notorious [**100-bucket limit**](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_s3) per account, which could not be raised and caused many companies significant pain. As of 2015, you can [request increases](https://aws.amazon.com/about-aws/whats-new/2015/08/amazon-s3-introduces-new-usability-enhancements/). You can ask to increase the limit, but it will still be capped (generally below ~1000 per account).
 -	🔸Be careful not to make implicit assumptions about transactionality or sequencing of updates to objects. Never assume that if you modify a sequence of objects, the clients will see the same modifications in the same sequence, or if you upload a whole bunch of files, that they will all appear at once to all clients.
 -	🔸S3 has an [**SLA**](https://aws.amazon.com/s3/sla/) with 99.9% uptime. If you use S3 heavily, you’ll inevitably see occasional error accessing or storing data as disks or other infrastructure fail. Availability is usually restored in seconds or minutes. Although availability is not extremely high, as mentioned above, durability is excellent.
 -	🔸After uploading, any change that you make to the object causes a full rewrite of the object, so avoid appending-like behavior with regular files.
 -	🔸Eventual data consistency, as discussed above, can be surprising sometimes. If S3 suffers from internal replication issues, an object may be visible from a subset of the machines, depending on which S3 endpoint they hit. Those usually resolve within seconds; however, we’ve seen isolated cases when the issue lingered for 20-30 hours.
 -	🔸**MD5s and multi-part uploads:** In S3, the [ETag header in S3](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html) is a hash on the object. And in many cases, it is the MD5 hash. However, this [is not the case in general](http://stackoverflow.com/questions/12186993/what-is-the-algorithm-to-compute-the-amazon-s3-etag-for-a-file-larger-than-5gb) when you use multi-part uploads. One workaround is to compute MD5s yourself and put them in a custom header (such as is done by [s4cmd](https://github.com/bloomreach/s4cmd)).
--	🔸**Incomplete multi-part upload costs:** Incomplete multi-part uploads accrue [storage charges](http://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpuploadpricing) even if the upload fails and no S3 object is created. [Amazon](http://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config) ([and](http://www.deplication.net/2016/06/aws-tip-save-s3-costs-with-abort.html) [others](https://www.sumologic.com/aws/s3/s3-cost-optimization/)) recommend using a lifecycle policy to clean up incomplete uploads and save on storage costs. Note that if you have many of these, it may be worth investigating whatever's failing regularly. 
+-	🔸**Incomplete multi-part upload costs:** Incomplete multi-part uploads accrue [storage charges](http://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpuploadpricing) even if the upload fails and no S3 object is created. [Amazon](http://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config) ([and](http://www.deplication.net/2016/06/aws-tip-save-s3-costs-with-abort.html) [others](https://www.sumologic.com/aws/s3/s3-cost-optimization/)) recommend using a lifecycle policy to clean up incomplete uploads and save on storage costs. Note that if you have many of these, it may be worth investigating whatever's failing regularly.
 -	🔸**US Standard region:** Previously, the us-east-1 region (also known as the US Standard region) was replicated across coasts, which led to greater variability of latency. Effective Jun 19, 2015 this is [no longer the case](https://forums.aws.amazon.com/ann.jspa?annID=3112). All Amazon S3 regions now support read-after-write consistency. Amazon S3 also renamed the US Standard region to the US East (N. Virginia) region to be consistent with AWS regional naming conventions.
 - 🔸**S3 authentication versions and regions:** In newer regions, S3 [only supports the latest authentication](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version). If an S3 file operation using CLI or SDK doesn't work in one region, but works correctly in another region, make sure you are using the latest [authentication signature](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html).
 
@@ -791,7 +801,7 @@ EC2
 ### EC2 Basics
 
 -	📒 [Homepage](https://aws.amazon.com/ec2/) ∙ [Documentation](https://aws.amazon.com/documentation/ec2/) ∙ [FAQ](https://aws.amazon.com/ec2/faqs/) ∙ [Pricing](https://aws.amazon.com/ec2/pricing/) (see also [ec2instances.info](http://www.ec2instances.info/)\)
--	**EC2** (Elastic Compute Cloud) is AWS’ offering of the most fundamental piece of cloud computing: A [virtual private server](https://en.wikipedia.org/wiki/Virtual_private_server). These “instances” can run [most Linux, BSD, and Windows operating systems](https://aws.amazon.com/ec2/faqs/#What_operating_system_environments_are_supported). Internally, they've used a heavily modified[Xen](https://en.wikipedia.org/wiki/Xen) virtualization. That said, new instance classes are being introduced with a KVM derived hypervisor instead. So far, this is limited to the C5 instance families.
+-	**EC2** (Elastic Compute Cloud) is AWS’ offering of the most fundamental piece of cloud computing: A [virtual private server](https://en.wikipedia.org/wiki/Virtual_private_server). These “instances” can run [most Linux, BSD, and Windows operating systems](https://aws.amazon.com/ec2/faqs/#What_operating_system_environments_are_supported). Internally, they've used a heavily modified [Xen](https://en.wikipedia.org/wiki/Xen) virtualization. That said, new instance classes are being introduced with a KVM derived hypervisor instead, called [Nitro](http://www.brendangregg.com/blog/2017-11-29/aws-ec2-virtualization-2017.html). So far, this is limited to the C5 and M5 instance types. Lastly, there's a "bare metal hypervisor" available for [i3.metal instances](https://aws.amazon.com/blogs/aws/new-amazon-ec2-bare-metal-instances-with-direct-access-to-hardware/) in a limited preview.
 -	The term “EC2” is sometimes used to refer to the servers themselves, but technically refers more broadly to a whole collection of supporting services, too, like load balancing (CLBs/ALBs/NLBs), IP addresses (EIPs), bootable images (AMIs), security groups, and network drives (EBS) (which we discuss individually in this guide).
 -	💸**[EC2 pricing](https://aws.amazon.com/ec2/pricing/)** and **[cost management](#ec2-cost-management)** is a complicated topic. It can range from free (on the [AWS free tier](https://aws.amazon.com/free/)) to a lot, depending on your usage. Pricing is by instance type, by second or hour, and changes depending on AWS region and whether you are purchasing your instances [On-Demand](https://aws.amazon.com/ec2/pricing/on-demand/), on the [Spot market](https://aws.amazon.com/ec2/spot/) or pre-purchasing ([Reserved Instances](https://aws.amazon.com/ec2/pricing/reserved-instances/)).
 - **Network Performance:** For some instance types, AWS uses general terms like Low, Medium, and High to refer to network performance. Users have done [benchmarking](http://stackoverflow.com/questions/18507405/ec2-instance-typess-exact-network-performance) to provide expectations for what these terms can mean.
@@ -800,7 +810,7 @@ EC2
 
 -	Running EC2 is akin to running a set of physical servers, as long as you don’t do automatic scaling or tooled cluster setup. If you just run a set of static instances, migrating to another VPS or dedicated server provider should not be too hard.
 -	🚪**Alternatives to EC2:** The direct alternatives are Google Cloud, Microsoft Azure, Rackspace, DigitalOcean, AWS's own Lightsail offering, and other VPS providers, some of which offer similar APIs for setting up and removing instances. (See the comparisons [above](#when-to-use-aws).)
--	**Should you use Amazon Linux?** AWS encourages use of their own [Amazon Linux](https://aws.amazon.com/amazon-linux-ami/), which is evolved from [Red Hat Enterprise Linux (RHEL)](https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Linux) and [CentOS](https://en.wikipedia.org/wiki/CentOS). It’s used by many, but [others are skeptical](https://www.exratione.com/2014/08/do-not-use-amazon-linux/). Whatever you do, think this decision through carefully. It’s true Amazon Linux is heavily tested and better supported in the unlikely event you have deeper issues with OS and virtualization on EC2. But in general, many companies do just fine using a standard, non-Amazon Linux distribution, such as Ubuntu or CentOS. Using a standard Linux distribution means you have an exactly replicable environment should you use another hosting provider instead of (or in addition to) AWS. It’s also helpful if you wish to test deployments on local developer machines running the same standard Linux distribution (a practice that’s getting more common with Docker, too. Amazon now supports an official [Amazon Linux Docker image](http://docs.aws.amazon.com/AmazonECR/latest/userguide/amazon_linux_container_image.html), aimed at assisting with local development on a comparable environment, though this is new enough that it should be considered experimental).
+-	**Should you use Amazon Linux?** AWS encourages use of their own [Amazon Linux](https://aws.amazon.com/amazon-linux-ami/), which is evolved from [Red Hat Enterprise Linux (RHEL)](https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Linux) and [CentOS](https://en.wikipedia.org/wiki/CentOS). It’s used by many, but [others are skeptical](https://www.exratione.com/2014/08/do-not-use-amazon-linux/). Whatever you do, think this decision through carefully. It’s true Amazon Linux is heavily tested and better supported in the unlikely event you have deeper issues with OS and virtualization on EC2. But in general, many companies do just fine using a standard, non-Amazon Linux distribution, such as Ubuntu or CentOS. Using a standard Linux distribution means you have an exactly replicable environment should you use another hosting provider instead of (or in addition to) AWS. It’s also helpful if you wish to test deployments on local developer machines running the same standard Linux distribution (a practice that’s getting more common with Docker, too. Amazon now supports an official [Amazon Linux Docker image](http://docs.aws.amazon.com/AmazonECR/latest/userguide/amazon_linux_container_image.html), aimed at assisting with local development on a comparable environment, though this is new enough that it should be considered experimental). Note that the currently-in-testing [Amazon Linux 2](https://aws.amazon.com/about-aws/whats-new/2017/12/introducing-amazon-linux-2/) supports on-premise deployments explicitly.
 -	**EC2 costs:** See the [section on this](#ec2-cost-management).
 
 ### EC2 Tips
@@ -843,6 +853,7 @@ EC2
 -	🔸Periodically you may find that your server or load balancer is receiving traffic for (presumably) a previous EC2 server that was running at the same IP address that you are handed out now (this may not matter, or it can be fixed by migrating to another new instance).
 -	❗If the EC2 API itself is a critical dependency of your infrastructure (e.g. for automated server replacement, custom scaling algorithms, etc.) and you are running at a large scale or making many EC2 API calls, make sure that you understand when they might fail (calls to it are [rate limited](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/query-api-troubleshooting.html#api-request-rate) and the limits are not published and subject to change) and code and test against that possibility.
 -	❗Many newer EC2 instance types are EBS-only. Make sure to factor in EBS performance and costs when planning to use them.
+-	❗If you're operating at significant scale, you may wish to break apart API calls that enumerate all of your resources, and instead operate either on individual resources, or a subset of the entire list. EC2 APIs will time out! Consider using [filters](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html) to restrict what gets returned.
 -	❗⏱ Instances come in two types: **Fixed Performance Instances** (e.g. M3, C3, and R3) and [**Burstable Performance Instances**](https://aws.amazon.com/ec2/instance-types/#burst) (e.g. T2). A T2 instance receives CPU credits continuously, the rate of which depends on the instance size. T2 instances accrue CPU credits when they are idle, and use CPU credits when they are active. However, once an instance runs out of credits, you'll notice a severe degradation in performance. If you need consistently high CPU performance for applications such as video encoding, high volume websites or HPC applications, it is recommended to use Fixed Performance Instances.
 -	Instance user-data is [limited to 16 KB](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html#instancedata-add-user-data). (This limit applies to the data in raw form, not base64-encoded form.) If more data is needed, it can be downloaded from S3 by a user-data script.
 -	Very new accounts may not be able to launch some instance types, such as GPU instances, because of an initially imposed “soft limit” of zero. This limit can be raised by making a support request. See [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for the method to make the support request. Note that this limit of zero is [not currently documented](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ec2).
@@ -857,6 +868,7 @@ CloudWatch
 * CloudWatch monitoring is the standard mechanism for keeping tabs on AWS resources. A wide range of  [**metrics and dimensions**](http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html) are available via CloudWatch, allowing you to create time based graphs, **[alarms](http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html)**, and **[dashboards](http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html)**.
     * Alarms are the most practical use of CloudWatch, allowing you to trigger notifications from any given metric.
     * Alarms can trigger [SNS notifications](http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html), [Auto Scaling actions](http://docs.aws.amazon.com/autoscaling/latest/userguide/policy_creating.html), or [EC2 actions](http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/UsingAlarmActions.html).
+    * Alarms also support [alerting when any M out of N datapoints cross the alarm threshold](https://aws.amazon.com/about-aws/whats-new/2017/12/amazon-cloudwatch-alarms-now-alerts-you-when-any-m-out-of-n-metric-datapoints-in-an-interval-are-above-your-threshold/).
     * Publish and share graphs of metrics by creating [customizable dashboard views](https://aws.amazon.com/blogs/aws/cloudwatch-dashboards-create-use-customized-metrics-views/).
 		* Monitor and report on EC2 [instance system check failure alarms](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html#creating_status_check_alarms).
 * **Using CloudWatch Events:**
@@ -867,13 +879,14 @@ CloudWatch
     * [CloudWatch Logs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) is a streaming log storage system. By storing logs within AWS you have access to unlimited paid storage, but you also have the option of streaming logs directly to ElasticSearch or custom Lambdas.
     * A [log agent installed](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_GettingStarted.html) on your servers will process logs over time and send them to CloudWatch Logs.
     * You can [export logged data to S3](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/S3Export.html) or stream results to other AWS services.
+    * CloudWatch Logs can be [encrypted using keys managed through KMS](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html).
 * **Detailed monitoring:** [Detailed monitoring](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch-new.html) for EC2 instances must be enabled to get granular metrics, and is [billed under CloudWatch](https://aws.amazon.com/cloudwatch/pricing/).
 
 ### CloudWatch Alternatives and Lock-In
 
 * CloudWatch offers fairly basic functionality that doesn't create significant (additional) AWS lock-in. Most of the metrics provided by the service can be obtained through APIs that can be imported into other aggregation or visualization tools or services (many specifically provide CloudWatch data import services).
-* 🚪 Alternatives to CloudWatch monitoring services include [NewRelic](http://newrelic.com/), [Datadog](http://datadog.com/), [Sumo Logic](http://sumologic.com/), [Zabbix](http://zabbix.com/), [Nagios](http://nagios.org/), [Ruxit](http://ruxit.com/), [Elastic Stack](https://www.elastic.co/v5), open source options such as [StatsD](https://github.com/etsy/statsd) or [collectd](https://collectd.org/) with [Graphite](https://graphiteapp.org/), and many others.
-* 🚪 CloudWatch Log alternatives include [Splunk](http://splunk.com/), [Sumo Logic](http://sumologic.com/), [Loggly](http://loggly.com/), [Logstash](https://www.elastic.co/products/logstash), [Papertrail](https://papertrailapp.com/), [Elastic Stack](https://www.elastic.co/v5), and other centralized logging solutions.
+* 🚪 Alternatives to CloudWatch monitoring services include [NewRelic](http://newrelic.com/), [Datadog](http://datadog.com/), [Sumo Logic](http://sumologic.com/), [Zabbix](http://zabbix.com/), [Nagios](http://nagios.org/), [Ruxit](http://ruxit.com/), [Elastic Stack](https://www.elastic.co/elk-stack), open source options such as [StatsD](https://github.com/etsy/statsd) or [collectd](https://collectd.org/) with [Graphite](https://graphiteapp.org/), and many others.
+* 🚪 CloudWatch Log alternatives include [Splunk](http://splunk.com/), [Sumo Logic](http://sumologic.com/), [Loggly](http://loggly.com/), [Logstash](https://www.elastic.co/products/logstash), [Papertrail](https://papertrailapp.com/), [Elastic Stack](https://www.elastic.co/elk-stack), and other centralized logging solutions.
 
 ### CloudWatch Tips
 
@@ -969,6 +982,7 @@ EBS
 -	⏱A worthy read is AWS’ [post on EBS IO characteristics](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-io-characteristics.html) as well as their [performance tips](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSPerformance.html#d0e86148).
 -	⏱One can [provision IOPS](http://aws.amazon.com/ebs/details/) (that is, pay for a specific level of I/O operations per second) to ensure a particular level of performance for a disk.
 -	⏱A single EBS volume allows 10k IOPS max. To get the maximum performance out of an EBS volume, it has to be of a maximum size and attached to an EBS-optimized EC2 instance.
+- 	💸Standard EBS volumes improve IOPS with size. It may make sense for you to simply enlarge a volume instead of paying for better performance explicitly. This can in many cases reduce costs by 2/3. 
 -	A standard block size for an EBS volume is 16kb.
 
 ### EBS Gotchas and Limitations
@@ -1044,6 +1058,13 @@ Load Balancers
 -	**Scaling:** CLBs and ALBs can scale to very high throughput, but scaling up is not instantaneous. If you’re expecting to be hit with a lot of traffic suddenly, it can make sense to load test them so they scale up in advance. You can also [contact Amazon](http://aws.amazon.com/articles/1636185810492479) and have them “pre-warm” the load balancer.
 -	**Client IPs:** In general, if servers want to know true client IP addresses, load balancers must forward this information somehow. CLBs add the standard [X-Forwarded-For](https://en.wikipedia.org/wiki/X-Forwarded-For) header. When using an CLB as an HTTP load balancer, it’s possible to get the client’s IP address from this.
 -	**Using load balancers when deploying:** One common pattern is to swap instances in the load balancer after spinning up a new stack with your latest version, keep old stack running for one or two hours, and either flip back to old stack in case of problems or tear it down.
+-   **Rotating Certificates while retaining ARN:** Rotating IAM Server Certificates can be difficult as the standard practice is to upload a new one then update all resources with the new ARN. You can however retain the same ARN using the `update-certificate` call with the following process:
+  1. Upload a new IAM Server Certificate with a unique name (e.g fuzzy.com.new)
+  2. Rename the existing IAM Server Certificate (e.g fuzzy.com to fuzzy.com.expired)
+  3. Rename the new IAM Server Certificate to the name of the previously existing certificate (e.g fuzzy.com.new to fuzzy.com)
+  4. Jiggle the CLB/ALB Listener to pick up the change:
+      * ALB: Invoke modify-listener with the existing details for the ALB Listener
+	  * CLB: Invoke create-load-balancer-listeners with the existing details for the CLB listener
 
 ### Load Balancer Gotchas and Limitations
 
@@ -1054,6 +1075,7 @@ Load Balancers
 -	❗CLBs and ALBs take time to scale up, it does not handle sudden spikes in traffic well. Therefore, if you anticipate a spike, you need to “pre-warm” the load balancer by gradually sending an increasing amount of traffic.
 -	❗Tune your healthchecks carefully — if you are too aggressive about deciding when to remove an instance and conservative about adding it back into the pool, the service that your load balancer is fronting may become inaccessible for seconds or minutes at a time. Be extra careful about this when an autoscaler is configured to terminate instances that are marked as being unhealthy by a managed load balancer.
 -	❗CLB HTTPS listeners don't support Server Name Indication (SNI). If you need SNI, you can work around this limitation by either providing a certificate with Subject Alternative Names (SANs) or by using TCP listeners and terminating SSL at your backend.
+-	🔸 There is a limit on the number of ALBs, CLBs and NLBs per region (separately). As of late 2017, the default limit for each is 20 per region. These limits can be easily raised for ALB and CLB, but AWS is quite reluctant to raise the limit on NLBs.
 
 CLB
 ---
@@ -1208,7 +1230,7 @@ RDS Aurora
 -	In order to take advantage of Aurora’s higher concurrency, applications should be configured with large database connection pools and should execute as many queries concurrently as possible. For example, Aurora servers have been tested to produce increasing performance on some OLTP workloads with [up to 5,000 connections](http://www.slideshare.net/AmazonWebServices/amazon-aurora-amazons-new-relational-database-engine/31).
 -	[Aurora scales well with multiple CPUs](https://www.percona.com/blog/2016/05/26/aws-aurora-benchmarking-part-2/) and may require a large instance class for optimal performance.
 -	Because Aurora is based on MySQL 5.6.10, avoiding any MySQL features from 5.7 or later will ease the transition from a MySQL-compatible database into Aurora.
--	The easiest migration path to Aurora is restoring a database snapshot from MySQL 5.6. The next easiest method is restoring a dump from a MySQL-compatible database such as MariaDB. For [low-downtime migrations](http://cantrill.io/howto/aws/2016/06/06/migrating-from-mysql-to-aurora-with-almost-no-downtime.html) from other MySQL-compatible databases, you can set up an Aurora instance as a replica of your existing database. If none of those methods are options, Amazon offers a fee-based data migration service.
+-	The easiest migration path to Aurora is restoring a database snapshot from MySQL 5.6. The next easiest method is restoring a dump from a MySQL-compatible database such as MariaDB. For [low-downtime migrations](https://aws.amazon.com/blogs/aws/amazon-aurora-update-spatial-indexing-and-zero-downtime-patching/) from other MySQL-compatible databases, you can set up an Aurora instance as a replica of your existing database. If none of those methods are options, Amazon offers a fee-based data migration service.
 -	You can replicate [from an Aurora cluster to MySQL or to another Aurora cluster](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Overview.Replication.MySQLReplication.html). This requires binary logging to be enabled and is not as performant as native Aurora replication.
 -	Because Aurora read replicas are the [equivalent of a multi-AZ backup](http://stackoverflow.com/a/32428651/129052) and they can be configured as zero-data-loss failover targets, there are fewer scenarios in which the creation of a multi-AZ Aurora instance is required.
 
@@ -1221,17 +1243,17 @@ RDS SQL Server
 
 ### RDS SQL Server Basics
 
--	[RDS offers SQL Server 2008 R2, 2012, 2014, and 2016](https://aws.amazon.com/rds/sqlserver/) including Express, Web, Standard and Enterprise (2008 R2 and 2012 only for Enterprise)
+-	[RDS offers SQL Server 2008 R2, 2012, 2014, 2016 and 2017](https://aws.amazon.com/rds/sqlserver/) including Express, Web, Standard and Enterprise.
 
 ### RDS SQL Server Tips
 
--	Recently added support for [backup and restore to/from S3](https://www.brentozar.com/archive/2016/07/holy-cow-amazon-rds-sql-server-just-changed-everything/) which may make it an attractive DR option for on-premises installations.
+-	Recently added support for [backup and restore to/from S3](https://www.brentozar.com/archive/2016/07/holy-cow-amazon-rds-sql-server-just-changed-everything/) which may make it an attractive [DR option](https://aws.amazon.com/blogs/aws/amazon-rds-for-sql-server-support-for-native-backuprestore-to-amazon-s3/) for on-premises installations.
 
 ### RDS SQL Server Gotchas and Limitations
 
 -	🔸The user is granted only db_owner privileges for each database on the instance.
 -	🔸Storage cannot be expanded for existing databases. If you need more space, you must restore your database on a new instance with larger storage.
--	🔸There is a **4TB** database size limit for non-Express editions.
+-	🔸There is a **16TB** database size limit for non-Express editions. There is also a minimum storage size, 20GB for Web and Express, 200GB for Standard and Enterprise.
 -	🔸Limited to [30 databases per instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html)
 
 
@@ -1307,6 +1329,7 @@ DynamoDB
 -	DynamoDB can be used [as a simple locking service](https://gist.github.com/ryandotsmith/c95fd21fab91b0823328).
 -	DynamoDB indexing can include **primary keys**, which can either be a single-attribute hash key or a composite hash-key range. You can also query non-primary key attributes using [**secondary indexes**](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html).
 -	**Data Types:** DynamoDB supports three [data types](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBMapper.DataTypes.html) – **number**, **string**, and **binary** – in both scalar and multi-valued sets. DynamoDB can also support [**JSON**](https://aws.amazon.com/blogs/aws/dynamodb-update-json-and-more/).
+-	As of late 2017, DynamoDB supports both [global tables](https://aws.amazon.com/dynamodb/global-tables/) and [backup / restore functionality](https://aws.amazon.com/dynamodb/backup-restore/).
 
 ### DynamoDB Gotchas and Limitations
 
@@ -1314,7 +1337,6 @@ DynamoDB
 -	🔸 It is important to make sure that DynamoDB [resource limits](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#limits-data-types) are compatible with your dataset and workload. For example, the maximum size value that can be added to a DynamoDB table is 400 KB (larger items can be stored in S3 and a URL stored in DynamoDB).
 -	🔸 Dealing with **time series data** in DynamoDB can be challenging. A global secondary index together with down sampling timestamps can be a possible solution as explained [here](https://blogs.aws.amazon.com/bigdata/post/Tx3KPZDXIBJEQ4B/Scaling-Writes-on-Amazon-DynamoDB-Tables-with-Global-Secondary-Indexes).
 -	🔸 DynamoDB does [not allow](https://forums.aws.amazon.com/thread.jspa?threadID=90137) an empty string as a valid attribute value. The most common work-around is to use a substitute value instead of leaving the field empty.
--	🔸 DynamoDB does not support moment-in-time/snapshot backups. It is not possible to create a moment-in-time view of a table without preventing all writes to a table and then consistently reading it. You can't work around this using [Cross-Region Replication](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.CrossRegionRepl.html) because under the covers, it uses [DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html). In a Stream, the order in which Items appear can be different than the order in wihch they were written. Only updates to the same Item are guaranteed to be ordered.
 -	🔸 When setting up [fine grained policies](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html) for access to DynamoDB tables, be sure to include their secondary indices in the policy document as well.
 
 
@@ -1350,6 +1372,31 @@ ECS
 
 🚧 [*Please help expand this incomplete section.*](CONTRIBUTING.md)
 
+Fargate
+-------
+
+### Fargate Basics
+-	📒 [Homepage](https://aws.amazon.com/fargate/) ∙ [FAQ](https://aws.amazon.com/fargate/faqs/) ∙ [Pricing](https://aws.amazon.com/fargate/pricing/)
+-   **Fargate** allows you to manage and deploy containers without having to worry about running the underlying compute infrastructure
+-   Fargate serves as a new backend (in addition to the legacy EC2 backend) on which ECS and EKS tasks can be run
+-   Fargate and EC2 backends are called "Launch Types"
+-   Fargate allows you to treat containers as fundamental building blocks of your infrastructure
+
+### Fargate Tips
+-   Fargate follows a similar mindset to Lambda, which lets you focus on applications, instead of dealing with undelying infrastructure
+-   Fargate is supported by CloudFormation, aws-cli and ecs-cli
+-   Fargate tasks can be launched alongside tasks that use EC2 Launch Type
+-   💸Before creating a large Fargate deployment, make sure to estimate costs and compare them against alternative solution that uses traditional EC2 deployment - Fargate prices can be several times those of equivalently-sized EC2 instances. To evaluate both solutions based on potential costs, refer to pricing for [EC2](https://aws.amazon.com/ec2/pricing/) and [Fargate](https://aws.amazon.com/fargate/pricing/).
+
+### Fargate Alternatives and Lock-in
+-   🚪[Azure Container Instances](https://azure.microsoft.com/en-us/services/container-instances/): Available on Microsoft Azure in preview version, allows to run applications in containers without having to manage virtual machines
+
+### Fargate Gotchas and Limitations
+-   As of April 2018, Fargate is available in [multiple regions](https://aws.amazon.com/about-aws/whats-new/2018/04/aws-fargate-now-available-in-ohio--oregon--and-ireland-regions/): us-east-1, us-east-2, us-west-2, and eu-west-1
+-   As of January 2018, Fargate can only be used with ECS, however there are plans to support EKS later in 2018
+-   The smallest resource values that can be configured for an ECS Task that uses Fargate is 0.25 vCPU and 0.5 GB of memory
+
+
 Lambda
 ------
 
@@ -1371,7 +1418,7 @@ Lambda
 -	Events sent to Lambda that fail processing can be managed using a [Dead Letter Queue (DLQ) in SQS.](http://docs.aws.amazon.com/lambda/latest/dg/dlq.html)
 -	More on serverless:
 	-	[Martin Fowler's thoughts.](http://martinfowler.com/articles/serverless.html)
-	-	[AWS Serverless Application Model (SAM)](https://github.com/awslabs/serverless-application-model), a simplification built on top of CloudFormation that can help to define, maange, and deploy serverless applications using Lambda.
+	-	[AWS Serverless Application Model (SAM)](https://github.com/awslabs/serverless-application-model), a simplification built on top of CloudFormation that can help to define, manage, and deploy serverless applications using Lambda.
 	-	[Serverless](https://github.com/serverless/serverless), one of the most popular frameworks for building serverless applications using AWS Lambda and other serverless compute options.
 	-	[Other helpful frameworks.](https://github.com/anaibol/awesome-serverless#frameworks)
 
@@ -1388,6 +1435,7 @@ Lambda
 - 🔸While adding/removing S3 buckets as triggers for Lambda function, this error may occur: "There was an error creating the trigger: Configuration is ambiguously defined. Cannot have overlapping suffixes in two rules if the prefixes are overlapping for the same event type." In this case, you can manually remove the Lambda event in the "Events" tab in the "Properties" section of the S3 bucket.
 - 🔸Managing the size of your deployment artifact can be a challenge, especially if using Java. Options to mitigate this include [proguard](https://www.guardsquare.com/en/proguard) and loading dependencies at runtime into /tmp.
 - When using DynamoDB as a trigger for your Lambda functions, this error may occur: "PROBLEM: internal Lambda error. Please contact Lambda customer support." This usually just means that Lambda can't detect anything in the DynamoDB stream within the last 48 hours. If the issue persists, deleting and recreating your trigger may help.
+- 🔸If your lambda needs access to resources in a VPC (for example ElastiCache or RDS), it will need to be deployed within it. This will increase cold-start times as an Elastic Network Interface (ENI) will have to be registered within the VPC for each concurrenat function. AWS also has a relatively low initial limit (350) on the number ENI's that can be created within an VPC, however this can be increased to the 1000s if a good case is made to AWS support.
 -	🔸 Lambda has several [**resource limits**](http://docs.aws.amazon.com/lambda/latest/dg/limits.html) as of 2017-06:
 	-	A **6MB** request or response payload size.
 	-	A **50 MB** limit on the compressed .zip/.jar file deployment package size.
@@ -1400,6 +1448,7 @@ Lambda
 -	This [AWS limit monitor using Lambdas](https://github.com/awslabs/aws-limit-monitor) shows use of multiple Lambdas for monitoring.
 -	This [Lambda ECS Worker Pattern](https://github.com/awslabs/lambda-ecs-worker-pattern) shows use of Lambda in a workflow where data from S3 is picked up by the Lambda, pushed to a queue, then sent to ECS for more processing.
 -	The [Secure Pet Store](https://github.com/awslabs/api-gateway-secure-pet-store) is a sample Java application which uses Lambda and API Gateway with Cognito (for user identity).
+-	[aws-lambda-list](https://github.com/unixorn/aws-lambda-list) is a list of "hopefully useful AWS lambdas and lambda-related resources". Quite a few code samples here; as usual, not guaranteed tested. Caveat Emptor.
 
 🚧 [*Please help expand this incomplete section.*](CONTRIBUTING.md)
 
@@ -1435,7 +1484,6 @@ API Gateway
 ### API Gateway Gotchas and Limitations
 
 -	🔸API Gateway only supports encrypted (https) endpoints, and does not support unencrypted HTTP. (This is probably a good thing.)
--	🔸API Gateway endpoints are always public, i.e. internet facing, and there is no mechanism to build private endpoints, e.g. for internal use on a [VPC](#vpcs-network-security-and-security-groups) but endpoints and their related resources can, optionally, [require authentication](http://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-to-api.html).
 -	🔸API Gateway doesn’t support multi-region deployments for high availability. It is a service that is deployed in a single region but comes with a global endpoint that is served from AWS edge locations (similar to a CloudFront distribution). You cannot have multiple API Gateways with the same hostname in different AWS regions and use Route 53 to distribute the traffic. More in [this forum post](https://forums.aws.amazon.com/thread.jspa?messageID=735342&#735342).
 - 🔸Integration timeout: All of the various integration types (eg: Lambda, HTTP) for API Gateway have timeouts, as described [here](http://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html#api-gateway-limits). Unlike some limits, these timeouts can't be increased.
 - 🔸API Gateway returns a 504 status code for any network or low level transport related issue. When this happens, you may see a message in the CloudWatch logs for the request that includes the message: `Execution failed due to an internal error`. One possible reason for this error is that even though your backend server is up and running, it may be doing something outside of the HTTP specification (like not sending well-formed chunked messages). You can test by hitting your backend directly with the `curl --raw -S -i <backend-endpoint-url>` and seeing if it complains.
@@ -1445,8 +1493,33 @@ API Gateway
 -	🔸Many changes to API Gateway resources need to be 'deployed' via console or API call. Unfortunately, API Gateway is terrible about notifying the user when changes are staged for deployment and what changes require deployment. If you've changed something about your API and it's not taking effect, there's a decent chance you just need to deploy it.
 	-	In particular, when deploying an API Gateway as part of a CloudFormation stack, changes will not automatically deploy unless the deployment resource itself was changed. You can change work around this by always changing the deployment resource on a CloudFormation update, or running a custom resource that ensures the deployment is made.
 	-	Alternatively, by using the [Serverless Application Model](https://github.com/awslabs/serverless-application-model) definition for an API Gateway resource, you can always expect the API to be deployed on a stack update since SAM will generate a new deployment every time.
+- 🔸API Gateway does not support nested query parameters on method requests.
+
 
 🚧 [*Please help expand this incomplete section.*](CONTRIBUTING.md)
+
+Step Functions
+------
+
+### Step Functions Basics
+-	📒 [Homepage](https://aws.amazon.com/step-functions/) ∙ [Developer guide](http://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) ∙ [FAQ](https://aws.amazon.com/step-functions/faqs/) ∙ [Pricing](https://aws.amazon.com/step-functions/pricing/)
+-	**Step Functions** is AWS’ way to create state machines that manage a serverless workflow.
+
+### Step Functions Tips
+-   A variety of structures are supported including branching, parallel operations and waits
+-   [Tasks](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-tasks.html) represent the real work nodes and are frequently Lambda functions, but can be [Activities](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-activities.html) which are externally driven tasks implemented any way you like.
+-   State machines have [data](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-state-machine-data.html) that "flows" through the steps and can be modified and added to as the state machine executes.
+-   It's best if your tasks are idempotent, in part because you may want to re-run the state machine with the same input data during debugging
+-   The AWS Console facilitates your examining the execution state at various steps.
+    -   The console lets you do this with a few steps:
+        -   select the "input" tab from the failed execution
+        -   copy the input data (JSON)
+        -   select the state machine name in the breadcrumbs
+        -   start a new execution, pasting the input data you copied previously
+
+### Step Functions Gotchas and Limitations
+-   Step Functions are free tier eligible up to an initial 4000 transitions per month. Thereafter, the charge is $0.025 per 1000 state transitions.
+-   You can have many, simulatanous, executions, but be aware of lambda throttling limits. This has been per-account, pre-region, but recently became settable per-lambda.
 
 Route 53
 --------
@@ -1501,9 +1574,9 @@ CloudFormation
 -	CloudFormation offers a visual [template designer](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/working-with-templates-cfn-designer-walkthrough-createbasicwebserver.html) that can be useful when getting up to speed with the template syntax.
 -	By using [StackSets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html), users can define and deploy an entire production application consisting of multiple stacks (one service per stack) in a single CloudFormation template.
 -	If you're developing a serverless application (i.e., using Lambda, API Gateway) CloudFormation offers a simplified template format called [SAM](https://github.com/awslabs/serverless-application-model).
--	❗Use a restrictive [stack policy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html)! Without one, you can inadvertantly delete live production resources, probably causing a severe outage.
+-	❗Use a restrictive [stack policy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html)! Without one, you can inadvertently delete live production resources, probably causing a severe outage.
 -	❗Turn on [termination protection](https://aws.amazon.com/about-aws/whats-new/2017/09/aws-cloudformation-provides-stack-termination-protection/) on all of your stacks to avoid costly accidents!
--	The CloudFormation [template reference](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html) is indispensible when discovering what is and isn't possible in a CloudFormation template.
+-	The CloudFormation [template reference](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html) is indispensable when discovering what is and isn't possible in a CloudFormation template.
 -	[Troposphere](https://github.com/cloudtools/troposphere) is a Python library that makes it much easier to create CloudFormation templates.
 	- Currently supports [AWS](https://github.com/cloudtools/troposphere#currently-supported-aws-resource-types) and [OpenStack](https://github.com/cloudtools/troposphere#currently-supported-openstack-resource-types) resource types.
 	- Troposphere attempts to support all resources types that can be described in CloudFormation templates.
@@ -1533,6 +1606,8 @@ CloudFormation
 -	🔸It’s hard to assemble good CloudFormation configurations from existing state. AWS does [offer a trick to do this](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-using-cloudformer.html), but it’s very clumsy.
 	- CloudFormer also hasn't been updated in ages (as of Oct 2017), doesn't support templatizing many new services, and won't fully define even existing services that have since been updated. For example, Dynamo tables defined through CloudFormer won't contain TTL definitions or auto-scaling configuration.
 -	🔸Many users don’t use CloudFormation at all because of its limitations, or because they find other solutions preferable. Often there are other ways to accomplish the same goals, such as local scripts (Boto, Bash, Ansible, etc.) you manage yourself that build infrastructure, or Docker-based solutions ([Convox](https://convox.com/), etc.).
+-	🔸Deploying large stacks (i.e., many resources) can be problematic due to unintuitive API limits. For instance, API Gateway's `CreateDeployment` API has a default limit of [3 requests per minute](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html) as of 1/12/2018. This limit is readily exceeded even in moderately-sized CloudFormation stacks. Creating CW alarms is another commonly seen limit (`PutMetricAlarm`, 3 tps as of 1/12/2018) especially when creating many autoscaling policies for DynamoDB. One way to work around this limit is to include CloudFormation 'DependsOn' clauses to artificially chain resource creation.
+-	🔸Creating/deleting stacks can be a little less clean than ideal. Some resources will leave behind traces in your AWS account even after deletion. E.g., Lambda will leave behind CloudWatch log groups that never expire.
 
 VPCs, Network Security, and Security Groups
 -------------------------------------------
@@ -1576,7 +1651,8 @@ VPCs, Network Security, and Security Groups
 -	❗If you delete the default VPC, you can [recreate it via the CLI or the console](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html#create-default-vpc).
 -	❗Be careful with VPC VPN credentials! If lost or compromised, the VPN endpoint must be deleted and recreated. See the instructions for [Replacing Compromised Credentials](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html#CompromisedCredentials).
 -	❗Security Groups and Route Tables apply entries separately for IPv4 and IPv6, so one must ensure they add entries for both protocols accordingly.
--	❗At launch, IPv6 for VPC is only available in the Ohio (us-east-2) region, though the launch announcement makes mention that other regions will see the same in the future.
+- 	💸Managed NAT gateways are a convenient alternative to 
+manually managing [NAT instances](https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPCNATInstance.html), but they do come at a cost per gigabyte. Consider [alternatives](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-comparison.html) if you're transferring many terrabytes from private subnets to the internet.
 
 KMS
 ---
@@ -1786,6 +1862,27 @@ Device Farm
 - 🔸AWS provide several tools and plugins for Device Farm, however, it doesn‘t cover all cases or platforms. It may require developing specific tools or plugins to support specific requirements.
 - ❗In general, Device Farm doesn‘t have Android devices from Chinese companies like Huawei, Meizu, Lenovo, etc. An actual list of supported devices located [here](https://aws.amazon.com/device-farm/device-list/).
 
+Mobile Hub
+----------
+
+### Mobile Hub Basics
+
+* 📒 [Homepage](https://aws.amazon.com/mobile/) ∙ [User guide](https://docs.aws.amazon.com/mobile-hub/latest/developerguide/) ∙ [FAQ](https://aws.amazon.com/mobile/faqs/) ∙ [Pricing](https://aws.amazon.com/mobile/pricing/)
+- **Mobile Hub** orchestrates multiple services to create an AWS backend for mobile and web applications.
+- Each _project_ in Mobile Hub has one _backend_ made up of configurable features, plus one or more _applications_.
+ - Features include Analytics, Cloud Logic, Conversational Bots, Hosting and Streaming, NoSQL Database, User Data Storage and User Sign-In. Each feature uses one or two services to deliver a chunk of functionality.
+ - Services used include [API Gateway](#api-gateway), [CloudFront](#cloudfront), Cognito, [Device Farm](#device-farm), [DynamoDB](#dynamodb), [Lambda](#lambda), Lex, Pinpoint and [S3](#S3).
+ - Application SDKs exist for Android (Java), iOS (Swift), Web (JS) and React Native (JS). There is also a CLI for JavaScript applications.
+
+### Mobile Hub Tips
+- The Mobile Hub [console](https://console.aws.amazon.com/mobilehub/home#/) has starter kits and tutorials for various app platforms.
+- The CLI allows local development of Lambda code (JS by default) with `awsmobile {pull|push}` commands, to sync from cloud to folder, and back again.
+- Mobile Hub itself is free, but each of the services has its own pricing model.
+
+### Mobile Hub Gotchas and Limitations
+- 🔸The Cloud API feature allows importing an existing Lambda function instead of defining a new one, but there are some rough edges with the CLI. Check the GitHub [issues](https://github.com/aws/awsmobile-cli/issues).
+- ❗Mobile Hub uses CloudFormation under the covers, and gets confused when a service is changed outside of the Mobile Hub console.
+
 IoT
 ---
 
@@ -1880,8 +1977,8 @@ Certificate Manager
 - 📒 [Homepage](https://aws.amazon.com/certificate-manager/) ∙ [User guide](http://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html) ∙ [FAQ](https://aws.amazon.com/certificate-manager/faqs/) ∙ [Pricing](https://aws.amazon.com/certificate-manager/pricing/)
 - Use the **Certificate Manager** to manage SSL/TLS certificates in other AWS services.
 - Supports importing existing certificates as well as issuing new ones.
-- Provides Domain Validated (DV) certificates. [Validation](http://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate.html) is done by sending an email to 3 contact addresses in WHOIS and 5 common addresses for the domain, for each domain name present in the request.
-- ACM will attempt to automatically [renew](http://docs.aws.amazon.com/acm/latest/userguide/how-domain-validation-works.html) a certificate issued by Amazon. It will first attempt to connect to the domain on HTTPS and check that the certificate used by the domain is the same with the certificate that it intends to renew. Failing that, ACM will attempt manual validation by sending emails to all domains in the certificate.
+- Provides Domain Validated (DV) certificates. [Validation](http://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate.html) is done by sending an email to 3 contact addresses in WHOIS and 5 common addresses for the domain, for each domain name present in the request. As of late 2017, this can also be done [via DNS instead](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html).
+- ACM will attempt to automatically [renew](http://docs.aws.amazon.com/acm/latest/userguide/how-domain-validation-works.html) a certificate issued by Amazon. It will first attempt to connect to the domain on HTTPS and check that the certificate used by the domain is the same with the certificate that it intends to renew. Failing that, it will check the DNS record used previously for validation. Failing that, ACM will attempt manual validation by sending emails to all domains in the certificate.
 
 ### Certificate Manager Alternatives and Lock-in
 
@@ -1890,8 +1987,8 @@ Certificate Manager
 ### Certificate Manager Tips
 
 - 🔹**Supported services:** Managed [Load Balancers](#load-balancers), [CloudFront](#cloudfront), [API Gateway](#api-gateway) and [Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/).
-- 🔸During the domain validation process, Certificate Manager will send an email to every contact address specified in the domain’s WHOIS record and up to five common administrative addresses. Some anti-spam filters can mark emails as spam because of this. You should check the spam folder of your email if you don’t receive a confirmation email.
-- 🔹 Setting up a certificate for a test domain you don't have email set up on? Use [AWS WorkMail](http://docs.aws.amazon.com/workmail/latest/userguide/what_is.html) to quickly set up an email for the domain to approve the request. Make sure to tear it down after.
+- 🔸During the domain validation process, if DNS validation is unsuccessful Certificate Manager will send an email to every contact address specified in the domain’s WHOIS record and up to five common administrative addresses. Some anti-spam filters can mark emails as spam because of this. You should check the spam folder of your email if you don’t receive a confirmation email.
+- 🔹 Setting up a certificate for a test domain you don't have email set up on? You can now use DNS validation instead.
 - 🔹Remember when requesting a wildcard domain that the request will not be valid for the level just below the wildcard, or any subdomains preceding the wildcard. Take for example an approved, issued certificate for `*.bar.example.com`. This would be valid for `foo.bar.example.com` but not `bar.example.com`. Likewise it would also not be valid for `www.bar.foo.example.com`. You would need to add each of these domains to the certificate request.
 
 ### Certificate Manager Gotchas and Limitations
@@ -1921,7 +2018,7 @@ WAF
 
 ### WAF Gotchas and Limitations
 
-- As of December 2016, WAF is available in the US East (Northern Virginia), US West (Oregon), Asia Pacific (Tokyo) and EU (Ireland) regions.
+- As of February 2018, WAF is available in the US East (Northern Virginia), US West (Oregon and Northern California), Asia Pacific (Tokyo) and EU (Ireland) regions.
 
 
 OpsWorks
@@ -1952,7 +2049,7 @@ OpsWorks
 
 - Although OpsWorks will let you work with common Chef recipes or Puppet modules when creating your stacks, creating custom recipes will require familiarity with Chef or Puppet syntax.
 - OpsWorks Stacks is not available in the Canada, GovCloud and Beijing regions.
-- OpsWorks for Chef Automate is [only available](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) in the North Virginia, Oregon, and Ireland regions.
+- OpsWorks for Chef Automate / Puppet Enterprise is [only available](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) in the North Virginia, Ohio, Oregon, Northern California, Frankfurt, Singapore, Tokyo, Sydney, and Ireland regions.
 
 
 Batch
@@ -2177,11 +2274,12 @@ Further Reading
 This section covers a few unusually useful or “must know about” resources or lists.
 
 -	AWS
-	-	[AWS In Plain English](https://www.expeditedssl.com/aws-in-plain-english): A readable overview of all the AWS services
-	-	[Awesome AWS](https://github.com/donnemartin/awesome-aws): A curated list of AWS tools and software
+	-	[AWS In Plain English](https://www.expeditedssl.com/aws-in-plain-english): A readable overview of all the AWS services.
+	-	[Awesome AWS](https://github.com/donnemartin/awesome-aws): A curated list of AWS tools and software.
 	-	[AWS Tips I Wish I'd Known Before I Started](https://wblinks.com/notes/aws-tips-i-wish-id-known-before-i-started/): A list of tips from [Rich Adams](https://richadams.me/)
 	-	[AWS Whitepapers](https://aws.amazon.com/whitepapers/): A list of technical AWS whitepapers, covering topics such as architecture, security and economics.
 	-	[Last Week in AWS](https://lastweekinaws.com): A weekly email newsletter covering the latest happenings in the AWS ecosystem.
+	-	[AWS Geek](https://www.awsgeek.com): A blog by Jerry Hargrove, with notes and hand-drawn diagrams about various AWS services.
 -	Books
 	-	[Amazon Web Services in Action](https://www.manning.com/books/amazon-web-services-in-action)
 	-	[AWS Lambda in Action](https://www.manning.com/books/aws-lambda-in-action)
